@@ -1,0 +1,57 @@
+<app-header></app-header>
+
+<div class="container">
+  <!-- Recommended -->
+  <section class="recommended">
+    <div class="recommended-info">
+      <h2>Recommended for you</h2>
+      <h3>{{ recommendedBook.title }}</h3>
+      <p>{{ recommendedBook.author }}</p>
+      <p class="price">{{ recommendedBook.price }}</p>
+      <button>Read More</button>
+    </div>
+    <div class="recommended-img">
+      <img [src]="recommendedBook.image" alt="Recommended Book" />
+    </div>
+  </section>
+
+  <!-- Popular Now -->
+  <section>
+    <h2>Popular Now</h2>
+    <div class="book-grid">
+      <div class="book-card" *ngFor="let book of popularBooks">
+        <img [src]="book.image" alt="{{ book.title }}" />
+        <h4>{{ book.title }}</h4>
+        <p>{{ book.author }}</p>
+        <span class="stars">⭐ {{ book.rating }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bestselling -->
+  <section>
+    <h2>Bestselling Books</h2>
+    <div class="book-grid">
+      <div class="book-card" *ngFor="let book of bestsellingBooks">
+        <img [src]="book.image" alt="{{ book.title }}" />
+        <h4>{{ book.title }}</h4>
+        <p>{{ book.author }}</p>
+        <span class="stars">⭐ {{ book.rating }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newly added -->
+  <section>
+    <h2>Newly Added Books</h2>
+    <div class="new-books">
+      <div class="new-book" *ngFor="let book of newBooks">
+        <div class="thumbnail"></div>
+        <h4>{{ book.title }}</h4>
+        <span class="stars">⭐ {{ book.rating }}</span>
+      </div>
+    </div>
+  </section>
+</div>
+<br><br>
+<app-footer></app-footer>

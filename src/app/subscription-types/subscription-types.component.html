@@ -1,0 +1,144 @@
+<app-header></app-header>
+
+<section class="subscription-container" role="main" aria-label="Planes de suscripción">
+  <h1>Elige tu plan de suscripción</h1>
+  <p>Selecciona el plan que mejor se adapte a tus necesidades y comienza a disfrutar de todos los beneficios.</p>
+
+  <div class="plans" role="list">
+    <div
+      class="plan-card"
+      *ngFor="let plan of subscriptionPlans"
+      [class.recommended]="plan.recommended"
+      role="listitem"
+      tabindex="0"
+      (keydown.enter)="selectPlan(plan)"
+      (keydown.space)="selectPlan(plan)"
+    >
+      <div class="plan-header">
+        <h2>{{ plan.name }}</h2>
+        <span *ngIf="plan.recommended" class="badge">Recomendado</span>
+      </div>
+      <p class="plan-price">{{ plan.price | currency:'USD' }}/mes</p>
+      <ul>
+        <li *ngFor="let benefit of plan.benefits">{{ benefit }}</li>
+      </ul>
+      <button type="button" (click)="selectPlan(plan)">Seleccionar</button>
+    </div>
+  </div>
+
+  <section
+    *ngIf="selectedPlan"
+    class="selected-plan-summary"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    <h3>Has seleccionado: {{ selectedPlan.name }}</h3>
+    <p>Precio: {{ selectedPlan.price | currency:'USD' }} al mes</p>
+
+    <form
+      [formGroup]="paymentForm"
+      (ngSubmit)="processPayment()"
+      class="payment-form"
+      novalidate
+      aria-label="Formulario de pago"
+    >
+      <label for="nombre_tarjetahabiente">
+        Nombre del tarjetahabiente
+        <input
+          id="nombre_tarjetahabiente"
+          type="text"
+          formControlName="nombre_tarjetahabiente"
+          placeholder="Nombre completo"
+          [attr.aria-invalid]="paymentForm.get('nombre_tarjetahabiente')?.invalid && paymentForm.get('nombre_tarjetahabiente')?.touched"
+          aria-describedby="nombreError"
+        />
+      </label>
+      <span
+        id="nombreError"
+        class="error"
+        *ngIf="paymentForm.get('nombre_tarjetahabiente')?.touched && paymentForm.get('nombre_tarjetahabiente')?.invalid"
+      >
+        <span *ngIf="paymentForm.get('nombre_tarjetahabiente')?.errors?.['required']">Requerido.</span>
+        <span *ngIf="paymentForm.get('nombre_tarjetahabiente')?.errors?.['nombreInvalido']">Nombre inválido.</span>
+      </span>
+
+      <label for="numero_tarjeta">
+        Número de tarjeta
+        <input
+          id="numero_tarjeta"
+          type="text"
+          maxlength="16"
+          formControlName="numero_tarjeta"
+          (input)="onCardNumberInput($event)"
+          placeholder="Solo números (16 dígitos)"
+          [attr.aria-invalid]="paymentForm.get('numero_tarjeta')?.invalid && paymentForm.get('numero_tarjeta')?.touched"
+          aria-describedby="numeroTarjetaError"
+        />
+      </label>
+      <span
+        id="numeroTarjetaError"
+        class="error"
+        *ngIf="paymentForm.get('numero_tarjeta')?.touched && paymentForm.get('numero_tarjeta')?.invalid"
+      >
+        <span *ngIf="paymentForm.get('numero_tarjeta')?.errors?.['required']">Requerido.</span>
+        <span *ngIf="paymentForm.get('numero_tarjeta')?.errors?.['pattern']">Número inválido (16 dígitos).</span>
+      </span>
+
+      <label for="fecha_expiracion">
+        Fecha de expiración (MM/AA)
+        <input
+          id="fecha_expiracion"
+          type="text"
+          maxlength="5"
+          placeholder="MM/AA"
+          formControlName="fecha_expiracion"
+          (input)="formatExpirationDate($event)"
+          [attr.aria-invalid]="paymentForm.get('fecha_expiracion')?.invalid && paymentForm.get('fecha_expiracion')?.touched"
+          aria-describedby="fechaExpiracionError"
+        />
+      </label>
+      <span
+        id="fechaExpiracionError"
+        class="error"
+        *ngIf="paymentForm.get('fecha_expiracion')?.touched && paymentForm.get('fecha_expiracion')?.invalid"
+      >
+        <span *ngIf="paymentForm.get('fecha_expiracion')?.errors?.['required']">Requerido.</span>
+        <span *ngIf="paymentForm.get('fecha_expiracion')?.errors?.['pattern']">Formato inválido.</span>
+        <span *ngIf="paymentForm.get('fecha_expiracion')?.errors?.['fechaExpirada']">Tarjeta expirada.</span>
+      </span>
+
+      <label for="cvv">
+        CVV
+        <input
+          id="cvv"
+          type="text"
+          maxlength="4"
+          placeholder="Código CVV"
+          formControlName="cvv"
+          (input)="onCvvInput($event)"
+          [attr.aria-invalid]="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched"
+          aria-describedby="cvvError"
+        />
+      </label>
+      <span
+        id="cvvError"
+        class="error"
+        *ngIf="paymentForm.get('cvv')?.touched && paymentForm.get('cvv')?.invalid"
+      >
+        <span *ngIf="paymentForm.get('cvv')?.errors?.['required']">Requerido.</span>
+        <span *ngIf="paymentForm.get('cvv')?.errors?.['pattern']">CVV inválido.</span>
+      </span>
+
+      <p *ngIf="paymentError" class="error" role="alert" aria-live="assertive">
+        {{ paymentError }}
+      </p>
+
+      <button type="submit" [disabled]="paymentProcessing" aria-live="polite">
+        {{ paymentProcessing ? 'Procesando...' : 'Procesar Pago' }}
+      </button>
+      <button type="button" (click)="cancelSelection()" [disabled]="paymentProcessing">Cancelar</button>
+    </form>
+  </section>
+</section>
+
+<app-footer></app-footer>

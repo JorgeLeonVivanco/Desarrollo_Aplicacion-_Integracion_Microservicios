@@ -1,0 +1,100 @@
+<div class="container">
+  <div class="form-box">
+    <h1 class="title">KioskCloud</h1>
+    <h2 class="subtitle">¡Bienvenido!</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        required
+        [class.invalid]="emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)"
+      />
+      <div *ngIf="emailControl?.invalid && (emailControl?.dirty || emailControl?.touched)" class="error-message">
+        <div *ngIf="emailControl?.errors?.['required']">Email es requerido</div>
+        <div *ngIf="emailControl?.errors?.['email']">Email no válido</div>
+      </div>
+
+      <label for="password">Password</label>
+      <div class="password-container">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          id="password"
+          formControlName="password"
+          required
+          [class.invalid]="passwordControl?.invalid && (passwordControl?.dirty || passwordControl?.touched)"
+        />
+        <button
+          type="button"
+          class="eye-icon"
+          (click)="togglePassword()"
+          aria-label="Toggle password visibility"
+          tabindex="-1"
+        >
+          <svg
+            *ngIf="showPassword"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <svg
+            *ngIf="!showPassword"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+            ></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+        </button>
+      </div>
+      <div *ngIf="passwordControl?.invalid && (passwordControl?.dirty || passwordControl?.touched)" class="error-message">
+        Contraseña requerida
+      </div>
+
+      <div class="options">
+        <!-- <label>
+          <input type="checkbox" [(ngModel)]="rememberMe" [ngModelOptions]="{ standalone: true }" />
+          Remember me
+        </label> -->
+        <a routerLink="/reset-password">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn" [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Cargando...' : 'Sign in' }}
+      </button>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <p class="signup-link">
+        Don't have an account? <a routerLink="/register">Sign up</a>
+      </p>
+    </form>
+  </div>
+
+  <div class="image-box">
+    <img src="assets/kiosko.png" alt="Kiosk" />
+  </div>
+</div>

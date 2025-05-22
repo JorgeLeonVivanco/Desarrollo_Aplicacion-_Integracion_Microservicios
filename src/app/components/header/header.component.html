@@ -1,0 +1,35 @@
+<!-- Header estilo KioskCloud -->
+<header class="kc-header">
+  <div class="kc-left">
+    <div class="kc-logo">KioskCloud</div>
+    <input type="text" placeholder="Search by book name, authors, genre, etc." class="kc-search">
+  </div>
+
+  <div class="kc-center">
+    <a href="cliente/home" class="kc-link active"><i class="icon">🏠</i> Home</a>
+    <a href="#" class="kc-link"><i class="icon">📚</i> My Library</a>
+    <a href="#" class="kc-link">
+      <i class="icon">🛍️</i> My Order
+    </a>
+  </div>
+
+  <div class="kc-right">
+    <button class="kc-role-switch" (click)="goToSubscription()">Obtener suscripción</button>
+    <i class="icon">🛒</i><span class="kc-badge">5</span>
+    <i class="icon">🔔</i>
+
+  <div class="user-menu">
+  <div class="kc-user" (click)="toggleMenu()">
+    <span class="username">{{ username }}</span>
+    <i class="fas fa-user-circle"></i>
+    <span class="arrow" [class.open]="menuOpen">⌄</span>
+  </div>
+
+  <ul class="dropdown-menu" *ngIf="menuOpen">
+    <li (click)="goToSubscription()">Gestionar suscripción</li>
+    <li (click)="goToSettings()">Configuración</li>
+    <li (click)="logout()">Cerrar sesión</li>
+  </ul>
+</div>
+  </div>
+</header>
